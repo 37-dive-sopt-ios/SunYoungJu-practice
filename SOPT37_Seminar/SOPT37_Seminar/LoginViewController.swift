@@ -9,6 +9,10 @@ import UIKit
 
 final class LoginViewController: UIViewController {
 
+    private enum LoginType { case email, phone }
+
+    // MARK: - UI
+
     private let titleLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 69, y: 161, width: 236, height: 44))
         label.text = "동네라서 가능한 모든것\n당근에서 가까운 이웃과 함께해요."
@@ -17,6 +21,16 @@ final class LoginViewController: UIViewController {
         label.numberOfLines = 2
         label.font = .pretendard(.bold, size: 18)
         return label
+    }()
+
+    private let loginTypeSegment: UISegmentedControl = {
+        let seg = UISegmentedControl(items: ["아이디", "휴대폰"])
+        seg.frame = CGRect(x: 60, y: 210, width: 250, height: 32)
+        seg.selectedSegmentIndex = 0
+        seg.selectedSegmentTintColor = UIColor(named: "Primary_orange")
+        seg.setTitleTextAttributes([.foregroundColor: UIColor(named: "White") as Any], for: .selected)
+        seg.setTitleTextAttributes([.foregroundColor: UIColor(named: "Grey400") as Any], for: .normal)
+        return seg
     }()
 
     private let idTextField: UITextField = {
@@ -29,11 +43,14 @@ final class LoginViewController: UIViewController {
         textField.autocapitalizationType = .none
         textField.layer.cornerRadius = 8
         textField.clipsToBounds = true
+        textField.textContentType = .username
+        textField.keyboardType = .emailAddress
         return textField
     }()
 
     private let passwordTextField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 20, y: 325, width: 335, height: 52))
+        let
+        textField = UITextField(frame: CGRect(x: 20, y: 325, width: 335, height: 52))
         textField.placeholder = "비밀번호를 입력해주세요"
         textField.font = .pretendard(.semiBold, size: 14)
         textField.backgroundColor = UIColor(named: "Grey200")
@@ -41,6 +58,7 @@ final class LoginViewController: UIViewController {
         textField.isSecureTextEntry = true
         textField.layer.cornerRadius = 8
         textField.clipsToBounds = true
+        textField.textContentType = .password
         return textField
     }()
 
@@ -56,56 +74,106 @@ final class LoginViewController: UIViewController {
         return button
     }()
 
-    // MARK: - Life Cycle
+    // MARK: - State
+    
+    private var currentType: LoginType = .email
 
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
+
+        view.backgroundColor = UIColor(named: "White")
         setLayout()
         applyTextFieldStyle()
         setupHideKeyboardWhenTappedAround()
+
+        idTextField.delegate = self
+        passwordTextField.delegate = self
+        loginTypeSegment.addTarget(self, action: #selector(loginTypeChanged), for: .valueChanged)
+        updateInputUI(for: .email) // 초기
     }
 
     // MARK: - Layout
-
+    
     private func setLayout() {
-        [titleLabel, idTextField, passwordTextField, loginButton].forEach {
+        [titleLabel, loginTypeSegment, idTextField, passwordTextField, loginButton].forEach {
             view.addSubview($0)
         }
     }
 
     // MARK: - TextField Style
-
+    
     private func applyTextFieldStyle() {
         [idTextField, passwordTextField].forEach {
             $0.addLeftPadding(12)
             $0.addRightPadding(12)
             $0.clearButtonMode = .whileEditing
+            $0.attributedPlaceholder = NSAttributedString(
+                string: $0.placeholder ?? "",
+                attributes: [.foregroundColor: UIColor(named: "Grey400") as Any]
+            )
         }
+        idTextField.returnKeyType = .next
+        passwordTextField.returnKeyType = .done
     }
 
-  // MARK: - Present
+    // MARK: - Present
     
     private func presentToWelcomeVC() {
-        let welcomeViewController = WelcomeViewController()
-        welcomeViewController.modalPresentationStyle = .formSheet
-        welcomeViewController.id = idTextField.text
-        self.present(welcomeViewController, animated: true)
+        let welcomeVC = WelcomeViewController()
+        welcomeVC.modalPresentationStyle = .formSheet
+        welcomeVC.id = idTextField.text
+        present(welcomeVC, animated: true)
     }
 
-//    private func pushToWelcomeVC() {
-//        let welcomeViewController = WelcomeViewController()
-//        welcomeViewController.id = idTextField.text
-//        self.navigationController?.pushViewController(welcomeViewController, animated: true)
-//    }
-    
     // MARK: - Actions
-
+    
     @objc
     private func loginButtonDidTap() {
         view.endEditing(true)
         presentToWelcomeVC()
-        // pushToWelcomeVC()
+    }
+
+    @objc
+    private func loginTypeChanged() {
+        let type: LoginType = (loginTypeSegment.selectedSegmentIndex == 0) ? .email : .phone
+        updateInputUI(for: type)
+    }
+
+    // MARK: - Helpers
+    
+    private func updateInputUI(for type: LoginType) {
+        currentType = type
+        idTextField.text = nil
+
+        switch type {
+        case .email:
+            idTextField.placeholder = "아이디를 입력해주세요"
+            idTextField.autocapitalizationType = .none
+
+        case .phone:
+            idTextField.placeholder = "휴대폰 번호를 입력해주세요 (숫자만)"
+            idTextField.autocapitalizationType = .none
+        }
+
+        idTextField.attributedPlaceholder = NSAttributedString(
+            string: idTextField.placeholder ?? "",
+            attributes: [.foregroundColor: UIColor(named: "Grey400") as Any]
+        )
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == idTextField {
+            passwordTextField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+            loginButtonDidTap()
+        }
+        return true
     }
 }
