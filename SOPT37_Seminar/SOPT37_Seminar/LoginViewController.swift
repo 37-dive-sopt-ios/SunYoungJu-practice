@@ -9,7 +9,7 @@ import UIKit
 
 final class LoginViewController: UIViewController {
 
-    private enum LoginType { case email, phone }
+    private enum LoginType { case id, phone }
 
     // MARK: - UI
 
@@ -43,8 +43,6 @@ final class LoginViewController: UIViewController {
         textField.autocapitalizationType = .none
         textField.layer.cornerRadius = 8
         textField.clipsToBounds = true
-        textField.textContentType = .username
-        textField.keyboardType = .emailAddress
         return textField
     }()
 
@@ -58,7 +56,6 @@ final class LoginViewController: UIViewController {
         textField.isSecureTextEntry = true
         textField.layer.cornerRadius = 8
         textField.clipsToBounds = true
-        textField.textContentType = .password
         return textField
     }()
 
@@ -76,7 +73,7 @@ final class LoginViewController: UIViewController {
 
     // MARK: - State
     
-    private var currentType: LoginType = .email
+    private var currentType: LoginType = .id
 
     // MARK: - Life Cycle
     
@@ -91,7 +88,6 @@ final class LoginViewController: UIViewController {
         idTextField.delegate = self
         passwordTextField.delegate = self
         loginTypeSegment.addTarget(self, action: #selector(loginTypeChanged), for: .valueChanged)
-        updateInputUI(for: .email) // 초기
     }
 
     // MARK: - Layout
@@ -137,7 +133,7 @@ final class LoginViewController: UIViewController {
 
     @objc
     private func loginTypeChanged() {
-        let type: LoginType = (loginTypeSegment.selectedSegmentIndex == 0) ? .email : .phone
+        let type: LoginType = (loginTypeSegment.selectedSegmentIndex == 0) ? .id : .phone
         updateInputUI(for: type)
     }
 
@@ -148,7 +144,7 @@ final class LoginViewController: UIViewController {
         idTextField.text = nil
 
         switch type {
-        case .email:
+        case .id:
             idTextField.placeholder = "아이디를 입력해주세요"
             idTextField.autocapitalizationType = .none
 
