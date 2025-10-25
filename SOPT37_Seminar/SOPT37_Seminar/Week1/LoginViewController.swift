@@ -16,7 +16,7 @@ final class LoginViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 69, y: 161, width: 236, height: 44))
         label.text = "동네라서 가능한 모든것\n당근에서 가까운 이웃과 함께해요."
-        label.textColor = UIColor(named: "Black")
+        label.textColor = UIColor(named: "Main_black")
         label.textAlignment = .center
         label.numberOfLines = 2
         label.font = .pretendard(.bold, size: 18)
@@ -28,7 +28,7 @@ final class LoginViewController: UIViewController {
         seg.frame = CGRect(x: 60, y: 210, width: 250, height: 32)
         seg.selectedSegmentIndex = 0
         seg.selectedSegmentTintColor = UIColor(named: "Primary_orange")
-        seg.setTitleTextAttributes([.foregroundColor: UIColor(named: "White") as Any], for: .selected)
+        seg.setTitleTextAttributes([.foregroundColor: UIColor(named: "Main_white") as Any], for: .selected)
         seg.setTitleTextAttributes([.foregroundColor: UIColor(named: "Grey400") as Any], for: .normal)
         return seg
     }()
@@ -52,7 +52,7 @@ final class LoginViewController: UIViewController {
         textField.placeholder = "비밀번호를 입력해주세요"
         textField.font = .pretendard(.semiBold, size: 14)
         textField.backgroundColor = UIColor(named: "Grey200")
-        textField.textColor = UIColor(named: "Black")
+        textField.textColor = UIColor(named: "Main_black")
         textField.isSecureTextEntry = true
         textField.layer.cornerRadius = 8
         textField.clipsToBounds = true
@@ -63,7 +63,7 @@ final class LoginViewController: UIViewController {
         let button = UIButton(frame: CGRect(x: 20, y: 420, width: 335, height: 57))
         button.backgroundColor = UIColor(named: "Primary_orange")
         button.setTitle("로그인하기", for: .normal)
-        button.setTitleColor(UIColor(named: "White"), for: .normal)
+        button.setTitleColor(UIColor(named: "Main_white"), for: .normal)
         button.titleLabel?.font = .pretendard(.bold, size: 18)
         button.layer.cornerRadius = 8
         button.clipsToBounds = true

@@ -27,7 +27,7 @@ final class WelcomeViewController: UIViewController {
         label.font = .pretendard(.extraBold, size: 25)
         label.textAlignment = .center
         label.numberOfLines = 2
-        label.textColor = UIColor(named: "Black")
+        label.textColor = UIColor(named: "Main_black")
         return label
     }()
 
@@ -35,7 +35,7 @@ final class WelcomeViewController: UIViewController {
         let button = UIButton(frame: CGRect(x: 20, y: 426, width: 335, height: 58))
         button.backgroundColor = UIColor(named: "Primary_orange")
         button.setTitle("메인으로", for: .normal)
-        button.setTitleColor(UIColor(named: "White"), for: .normal)
+        button.setTitleColor(UIColor(named: "Main_white"), for: .normal)
         button.titleLabel?.font = .pretendard(.bold, size: 18)
         button.layer.cornerRadius = 8
         button.clipsToBounds = true
@@ -57,7 +57,7 @@ final class WelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "White")
+        view.backgroundColor = UIColor(named: "Main_white")
         setLayout()
         bindID()
 
