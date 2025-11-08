@@ -83,7 +83,6 @@ final class LoginViewController: UIViewController {
         view.backgroundColor = UIColor(named: "White")
         setLayout()
         applyTextFieldStyle()
-        setupHideKeyboardWhenTappedAround()
 
         idTextField.delegate = self
         passwordTextField.delegate = self
